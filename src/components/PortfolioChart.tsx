@@ -20,6 +20,7 @@ const CustomTooltip = ({ active, payload }: any) => {
               data.name === 'Solana' ? 'sol' : 
               data.name === 'Cardano' ? 'ada' : 
               data.name === 'Polkadot' ? 'dot' : 
+              data.name === 'Dogecoin' ? 'doge' :
               data.name.toLowerCase()}-logo.svg`}
             alt={data.name}
             className="w-6 h-6"
@@ -32,6 +33,7 @@ const CustomTooltip = ({ active, payload }: any) => {
           <p className="text-sm">24h Volume: {data.volume}</p>
           <p className="text-sm">Sentiment: {data.sentiment}</p>
           <p className="text-sm">Volatility: {data.volatility}</p>
+          <p className="text-sm">{data.explanation}</p>
         </div>
       </div>
     );
@@ -82,18 +84,20 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
             <div className="space-y-3">
               {data.map((asset) => (
                 <div key={asset.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     <img 
                       src={`https://cryptologos.cc/logos/${asset.name.toLowerCase()}-${asset.name === 'Bitcoin' ? 'btc' : 
                         asset.name === 'Ethereum' ? 'eth' : 
                         asset.name === 'Solana' ? 'sol' : 
                         asset.name === 'Cardano' ? 'ada' : 
                         asset.name === 'Polkadot' ? 'dot' : 
+                        asset.name === 'Dogecoin' ? 'doge' :
                         asset.name.toLowerCase()}-logo.svg`}
                       alt={asset.name}
                       className="w-8 h-8"
                     />
                     <span className="font-medium">{asset.name}</span>
+                    <span className="text-lg text-center">${asset.amount}</span>
                   </div>
                   <span className="text-lg font-semibold">{asset.value}%</span>
                 </div>

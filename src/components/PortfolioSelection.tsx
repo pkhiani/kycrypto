@@ -65,6 +65,7 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
                         asset.name === 'Solana' ? 'sol' :
                         asset.name === 'Cardano' ? 'ada' :
                         asset.name === 'Polkadot' ? 'dot' :
+                        asset.name === 'Dogecoin' ? 'doge' :
                         asset.name.toLowerCase()
                       }-logo.svg`}
                       alt={asset.name}

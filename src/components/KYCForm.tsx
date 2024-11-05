@@ -84,7 +84,6 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                     <option value="growth">Aggressive Growth</option>
                     <option value="balanced">Balanced Growth</option>
                     <option value="conservative">Conservative Growth</option>
-                    <option value="income">Income Generation</option>
                     <option value="preservation">Capital Preservation</option>
                   </select>
                 </div>
@@ -156,6 +155,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                   <option value="bearish">Bearish - Expect market decline</option>
                   <option value="neutral">Neutral - Expect sideways movement</option>
                   <option value="bullish">Bullish - Expect market growth</option>
+                  <option value="bullish">Don't know</option>
                 </select>
               </div>
             </div>

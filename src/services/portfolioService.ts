@@ -60,7 +60,7 @@ const generatePrompt = (formData: KYCFormData): string => {
     - Market Expectation: ${formData.marketExpectation}
     - Volatility Comfort: ${formData.volatilityComfort}
     
-    Provide only the response in the following JSON format, including only the most suitable cryptocurrencies from Bitcoin, Ethereum, Solana, XRP, and Dogecoin:
+    Provide only the response in the following JSON format, including only the most suitable cryptocurrencies from Bitcoin, Ethereum, Solana, XRP, Dogecoin, Polkadot and Cardano:
 
     {
       "type": "Conservative|Balanced|Aggressive",
@@ -68,47 +68,79 @@ const generatePrompt = (formData: KYCFormData): string => {
         {
           "name": "Bitcoin",
           "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
           "color": "#F7931A",
           "marketCap": "$1.2T",
           "volume": "$28.5B",
           "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High"
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
         },
         {
           "name": "Ethereum",
           "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
           "color": "#3C3C3D",
           "marketCap": "$500B",
           "volume": "$18.3B",
           "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High"
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
         },
         {
           "name": "Solana",
           "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
           "color": "#00FFA3",
           "marketCap": "$50B",
           "volume": "$4B",
           "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High"
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
         },
         {
           "name": "XRP",
           "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
           "color": "#346AA9",
           "marketCap": "$40B",
           "volume": "$3B",
           "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High"
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
         },
         {
           "name": "Dogecoin",
           "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
           "color": "#C2A633",
           "marketCap": "$20B",
           "volume": "$2B",
           "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High"
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+        },
+        {
+          "name": "Polkadot",
+          "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
+          "color": "#E6007A",
+          "marketCap": "$5.9B",
+          "volume": "$130M",
+          "sentiment": "Bullish|Neutral|Bearish",
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+        },
+        {
+          "name": "Cardano",
+          "value": <percentage allocation>,
+          "amount": <investment amount allocation>,
+          "color": "#0031B4",
+          "marketCap": "$12.5B",
+          "volume": "$250M",
+          "sentiment": "Bullish|Neutral|Bearish",
+          "volatility": "Low|Medium|High",
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>
         }
       ]
     }`;
@@ -135,53 +167,31 @@ export const getAIPortfolioRecommendation = async (
     }
 
     const data = await response.json();
+    console.log(data);
+
+    // Extract JSON string by removing code block delimiters if present
+    const jsonContent = data.replace(/^```json|```$/g, '').trim();
     
+
     try {
-      // Clean up the response content
-      const jsonContent = (data.content || data.message || '').trim();
-      // Parse the JSON string
       const recommendation = JSON.parse(jsonContent);
-      
-      if (!recommendation.allocation || !Array.isArray(recommendation.allocation)) {
-        throw new Error('Invalid allocation format');
+      if (Array.isArray(recommendation.allocation)) {
+        const total = recommendation.allocation.reduce((sum: number, asset: PortfolioAllocation) => sum + asset.value, 0);
+        if (Math.abs(total - 100) <= 1) {
+          return recommendation.allocation;
+        }
       }
-
-      // Validate the allocation data
-      const validAllocation = recommendation.allocation.every((asset: any) => (
-        typeof asset === 'object' &&
-        typeof asset.name === 'string' &&
-        typeof asset.value === 'number' &&
-        typeof asset.color === 'string' &&
-        typeof asset.marketCap === 'string' &&
-        typeof asset.volume === 'string' &&
-        typeof asset.sentiment === 'string' &&
-        typeof asset.volatility === 'string'
-      ));
-
-      if (!validAllocation) {
-        throw new Error('Invalid asset data format');
-      }
-
-      // Validate total allocation is approximately 100%
-      const total = recommendation.allocation.reduce(
-        (sum: number, asset: PortfolioAllocation) => sum + asset.value,
-        0
-      );
-
-      if (Math.abs(total - 100) <= 1) {
-        return recommendation.allocation;
-      } else {
-        throw new Error('Total allocation does not sum to 100%');
-      }
+      throw new Error('Invalid allocation data');
     } catch (parseError) {
-      console.warn('Error parsing AI response:', parseError);
+      console.warn('Error parsing AI response, using fallback data:', parseError);
       return adjustFallbackPortfolio(formData);
     }
   } catch (error) {
-    console.warn('Error getting AI portfolio recommendation:', error);
+    console.warn('Error getting AI portfolio recommendation, using fallback data:', error);
     return adjustFallbackPortfolio(formData);
   }
 };
+
 
 // Adjust fallback portfolio based on user's risk profile
 const adjustFallbackPortfolio = (formData: KYCFormData): PortfolioAllocation[] => {
