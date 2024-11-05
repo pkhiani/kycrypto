@@ -115,12 +115,12 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
         </div>
       </div>
       
-      <div className="flex items-center mt-8 pt-6 border-t border-gray-200">
+      {/* <div className="flex items-center mt-8 pt-6 border-t border-gray-200">
         <MessageCircle className="h-6 w-6 text-blue-600" />
         <span className="ml-2 text-sm text-gray-600">
           Need help understanding your portfolio? Click the chat icon for personalized assistance
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };

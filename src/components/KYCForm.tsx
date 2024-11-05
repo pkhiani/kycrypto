@@ -54,7 +54,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Investment Amount</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Investment Amount ($)</label>
                   <input
                     type="number"
                     min="100"
