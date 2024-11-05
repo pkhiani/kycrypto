@@ -1,4 +1,5 @@
 import type { KYCFormData, PortfolioAllocation } from '../types';
+import axios from 'axios';
 
 // Fallback data when API is unavailable
 const fallbackPortfolio: PortfolioAllocation[] = [
@@ -176,10 +177,13 @@ export const getAIPortfolioRecommendation = async (
     try {
       const recommendation = JSON.parse(jsonContent);
       if (Array.isArray(recommendation.allocation)) {
-        const total = recommendation.allocation.reduce((sum: number, asset: PortfolioAllocation) => sum + asset.value, 0);
-        if (Math.abs(total - 100) <= 1) {
-          return recommendation.allocation;
-        }
+        // Fetch live market data for recommended cryptocurrencies
+        const liveData = await fetchLiveMarketData(recommendation.allocation);
+        const adjustedRecommendation = recommendation.allocation.map((asset, index) => ({
+          ...asset,
+          ...liveData[index],
+        }));
+        return adjustedRecommendation;
       }
       throw new Error('Invalid allocation data');
     } catch (parseError) {
@@ -189,6 +193,50 @@ export const getAIPortfolioRecommendation = async (
   } catch (error) {
     console.warn('Error getting AI portfolio recommendation, using fallback data:', error);
     return adjustFallbackPortfolio(formData);
+  }
+};
+
+const fetchLiveMarketData = async (
+  allocation: PortfolioAllocation[]
+): Promise<PortfolioAllocation[]> => {
+  try {
+    const symbols = allocation
+      .map((asset) => asset.name.toLowerCase())
+      .join(',');
+
+    const response = await axios.get(
+      `https://message-tailor-api-production.up.railway.app/crypto/market-data?symbols=${symbols}`
+    );
+
+    // If we have valid market data, update the allocations
+    if (response.data && response.data.data) {
+      return allocation.map(asset => {
+        const marketData = response.data.data.find(
+          (coin: any) => coin.name.toLowerCase() === asset.name.toLowerCase()
+        );
+
+        if (!marketData) {
+          return {
+            ...asset,
+            marketCap: 'N/A',
+            volume: 'N/A'
+          };
+        }
+
+        return {
+          ...asset,
+          marketCap: marketData.marketCap,
+          volume: marketData.volume,
+          // currentPrice: marketData.price,
+          // priceChange24h: marketData.percentChange24h
+        };
+      });
+    }
+
+    return allocation;
+  } catch (error) {
+    console.error('Error fetching market data:', error);
+    return allocation;
   }
 };
 

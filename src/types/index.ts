@@ -16,11 +16,15 @@ export interface KYCFormData {
 export interface PortfolioAllocation {
   name: string;
   value: number;
+  // amount: string;
   color: string;
   marketCap: string;
   volume: string;
   sentiment: string;
   volatility: string;
+  // currentPrice?: number;
+  // priceChange24h?: number;
+  // explanation?: string;
 }
 
 export interface CryptoAsset {
