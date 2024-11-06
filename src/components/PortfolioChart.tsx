@@ -1,12 +1,31 @@
 import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { PortfolioAllocation } from '../types';
-import { MessageCircle, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Wallet } from 'lucide-react';
+import { WalletDropdown } from './WalletDropdown';
 
 interface PortfolioChartProps {
   data: PortfolioAllocation[];
   onBack: () => void;
 }
+
+const wallets = [
+  {
+    name: 'MetaMask',
+    icon: 'https://metamask.io/assets/icon.svg',
+    url: 'https://metamask.io/'
+  },
+  {
+    name: 'Coinbase Wallet',
+    icon: 'https://images.ctfassets.net/q5ulk4bp65r7/1rFQCqoq8hipvVJSKdU3fQ/21ab733af7a8ab404e29b873ffb28348/coinbase-icon2.svg',
+    url: 'https://www.coinbase.com/wallet'
+  },
+  {
+    name: 'Trust Wallet',
+    icon: 'https://avatars.githubusercontent.com/u/32179889?s=280&v=4',
+    url: 'https://trustwallet.com/'
+  }
+];
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -76,6 +95,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
               <Tooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
+          
         </div>
 
         <div className="space-y-6">
@@ -104,23 +124,28 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
               ))}
             </div>
           </div>
-
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h4 className="font-semibold text-blue-900 mb-2">Portfolio Insights</h4>
-            <p className="text-blue-800">
-              This AI-generated portfolio is tailored to your risk profile and investment goals.
-              The allocation balances potential returns with your specified risk tolerance.
-            </p>
+              <h4 className="font-semibold text-blue-900 mb-2">Portfolio Insights</h4>
+              <p className="text-blue-800">
+                This AI-generated portfolio is tailored to your risk profile and investment goals.
+                The allocation balances potential returns with your specified risk tolerance.
+              </p>
           </div>
         </div>
       </div>
       
-      {/* <div className="flex items-center mt-8 pt-6 border-t border-gray-200">
-        <MessageCircle className="h-6 w-6 text-blue-600" />
-        <span className="ml-2 text-sm text-gray-600">
-          Need help understanding your portfolio? Click the chat icon for personalized assistance
-        </span>
-      </div> */}
+      <div className="bg-white mt-10 p-6 rounded-xl shadow-sm">
+          <div className="flex items-center mb-6">
+            <Wallet className="h-6 w-6 text-blue-600" />
+            <h2 className="ml-2 text-xl font-bold text-gray-900">Get Started with a Wallet</h2>
+          </div>
+          
+          <WalletDropdown wallets={wallets} />
+
+          <p className="mt-4 text-sm text-gray-600">
+            Choose a wallet to get started with cryptocurrency. Each option offers secure storage and easy access to digital assets.
+          </p>
+        </div>
     </div>
   );
 };

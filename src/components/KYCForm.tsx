@@ -39,7 +39,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Age Range</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full h-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.age || ''}
                     onChange={(e) => setFormData({ age: e.target.value })}
                     required
@@ -59,7 +59,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                     type="number"
                     min="100"
                     step="100"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full h-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.investmentAmount || ''}
                     onChange={(e) => setFormData({ investmentAmount: Number(e.target.value) })}
                     required
@@ -75,7 +75,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Investment Goal</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.investmentGoal || ''}
                     onChange={(e) => setFormData({ investmentGoal: e.target.value })}
                     required
@@ -91,7 +91,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Time Horizon</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.timeHorizon || ''}
                     onChange={(e) => setFormData({ timeHorizon: e.target.value as TimeHorizon })}
                     required
@@ -106,7 +106,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Risk Tolerance</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.riskTolerance || ''}
                     onChange={(e) => setFormData({ riskTolerance: e.target.value })}
                     required
@@ -146,7 +146,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Market Expectation</label>
                 <select
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full h-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   value={formData.marketExpectation || ''}
                   onChange={(e) => setFormData({ marketExpectation: e.target.value })}
                   required
@@ -168,7 +168,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                   How would you react to a 20% drop in your portfolio value?
                 </label>
                 <select
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   value={formData.volatilityComfort || ''}
                   onChange={(e) => setFormData({ volatilityComfort: e.target.value })}
                   required
