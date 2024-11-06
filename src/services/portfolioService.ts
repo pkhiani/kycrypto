@@ -61,7 +61,7 @@ const generatePrompt = (formData: KYCFormData): string => {
     - Market Expectation: ${formData.marketExpectation}
     - Volatility Comfort: ${formData.volatilityComfort}
     
-    Provide only the response in the following JSON format, including only the most suitable cryptocurrencies from Bitcoin, Ethereum, Solana, XRP, Dogecoin, Polkadot and Cardano:
+    Provide only the response in the following JSON format, including only the most suitable cryptocurrencies from Bitcoin, Ethereum, Solana, XRP, Dogecoin, Chainlink and Cardano:
 
     {
       "type": "Conservative|Balanced|Aggressive",
@@ -122,12 +122,12 @@ const generatePrompt = (formData: KYCFormData): string => {
           "explanation": <explanation on why the user should buy this crypto based on their inputs>
         },
         {
-          "name": "Polkadot",
+          "name": "Chainlink",
           "value": <percentage allocation>,
           "amount": <investment amount allocation>,
-          "color": "#E6007A",
-          "marketCap": "$5.9B",
-          "volume": "$130M",
+          "color": "#0847F7",
+          "marketCap": "$6.6B",
+          "volume": "$217M",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
           "explanation": <explanation on why the user should buy this crypto based on their inputs>
@@ -219,7 +219,8 @@ const fetchLiveMarketData = async (
           return {
             ...asset,
             marketCap: 'N/A',
-            volume: 'N/A'
+            volume: 'N/A',
+            volatility: 'N/A'
           };
         }
 
@@ -228,7 +229,7 @@ const fetchLiveMarketData = async (
           marketCap: marketData.marketCap,
           volume: marketData.volume,
           // currentPrice: marketData.price,
-          // priceChange24h: marketData.percentChange24h
+          volatility: marketData.percentChange24h
         };
       });
     }

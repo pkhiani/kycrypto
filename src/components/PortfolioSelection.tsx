@@ -64,7 +64,7 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
                         asset.name === 'Ethereum' ? 'eth' :
                         asset.name === 'Solana' ? 'sol' :
                         asset.name === 'Cardano' ? 'ada' :
-                        asset.name === 'Polkadot' ? 'dot' :
+                        asset.name === 'Chainlink' ? 'link' :
                         asset.name === 'Dogecoin' ? 'doge' :
                         asset.name.toLowerCase()
                       }-logo.svg`}
@@ -74,7 +74,7 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
                     <div>
                       <h4 className="font-medium text-gray-900">{asset.name}</h4>
                       <p className="text-sm text-gray-500">
-                        {asset.sentiment} • {asset.volatility} Risk
+                        {asset.sentiment} • ${asset.amount}
                       </p>
                     </div>
                   </div>

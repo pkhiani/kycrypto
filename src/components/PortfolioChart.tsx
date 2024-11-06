@@ -19,7 +19,7 @@ const CustomTooltip = ({ active, payload }: any) => {
               data.name === 'Ethereum' ? 'eth' : 
               data.name === 'Solana' ? 'sol' : 
               data.name === 'Cardano' ? 'ada' : 
-              data.name === 'Polkadot' ? 'dot' : 
+              data.name === 'Chainlink' ? 'link' : 
               data.name === 'Dogecoin' ? 'doge' :
               data.name.toLowerCase()}-logo.svg`}
             alt={data.name}
@@ -31,8 +31,8 @@ const CustomTooltip = ({ active, payload }: any) => {
         <div className="mt-2 space-y-1">
           <p className="text-sm">Market Cap: {data.marketCap}</p>
           <p className="text-sm">24h Volume: {data.volume}</p>
+          <p className="text-sm">24h Price Change: {Math.round(data.volatility * 100) / 100}% </p>
           <p className="text-sm">Sentiment: {data.sentiment}</p>
-          <p className="text-sm">Volatility: {data.volatility}</p>
           <p className="text-sm">{data.explanation}</p>
         </div>
       </div>
@@ -90,7 +90,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
                         asset.name === 'Ethereum' ? 'eth' : 
                         asset.name === 'Solana' ? 'sol' : 
                         asset.name === 'Cardano' ? 'ada' : 
-                        asset.name === 'Polkadot' ? 'dot' : 
+                        asset.name === 'Chainlink' ? 'link' : 
                         asset.name === 'Dogecoin' ? 'doge' :
                         asset.name.toLowerCase()}-logo.svg`}
                       alt={asset.name}
