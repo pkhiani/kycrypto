@@ -11,19 +11,14 @@ interface PortfolioChartProps {
 
 const wallets = [
   {
-    name: 'MetaMask',
-    icon: 'https://metamask.io/assets/icon.svg',
-    url: 'https://metamask.io/'
-  },
-  {
     name: 'Coinbase Wallet',
     icon: 'https://images.ctfassets.net/q5ulk4bp65r7/1rFQCqoq8hipvVJSKdU3fQ/21ab733af7a8ab404e29b873ffb28348/coinbase-icon2.svg',
-    url: 'https://www.coinbase.com/wallet'
+    url: 'https://coinbase.com/join/8ZWWRZQ?src=referral-link'
   },
   {
-    name: 'Trust Wallet',
-    icon: 'https://avatars.githubusercontent.com/u/32179889?s=280&v=4',
-    url: 'https://trustwallet.com/'
+    name: 'Crypto.com',
+    icon: 'https://raw.githubusercontent.com/gist/mahnunchik/23066a318de2956df3c769c87e4e6cbd/raw/e0f246d0e26ce770f3c3adca748a5a454907f8bb/crypto-com-coin-cro-logo.svg',
+    url: 'https://crypto.com/app/aph7q6ct7b'
   }
 ];
 
@@ -136,7 +131,6 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ data, onBack }) 
       
       <div className="bg-white mt-10 p-6 rounded-xl shadow-sm">
           <div className="flex items-center mb-6">
-            <Wallet className="h-6 w-6 text-blue-600" />
             <h2 className="ml-2 text-xl font-bold text-gray-900">Get Started with a Wallet</h2>
           </div>
           
