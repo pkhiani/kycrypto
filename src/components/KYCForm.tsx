@@ -39,7 +39,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Age Range</label>
                   <select
-                    className="mt-1 block w-full h-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full h-2/3 rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.age || ''}
                     onChange={(e) => setFormData({ age: e.target.value })}
                     required
@@ -59,7 +59,7 @@ export const KYCForm: React.FC<{ onSubmit: () => void }> = ({ onSubmit }) => {
                     type="number"
                     min="100"
                     step="100"
-                    className="mt-1 block w-full h-full rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full h-2/3 rounded-md border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={formData.investmentAmount || ''}
                     onChange={(e) => setFormData({ investmentAmount: Number(e.target.value) })}
                     required
