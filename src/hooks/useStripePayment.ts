@@ -48,9 +48,9 @@ export const useStripePayment = ({ baseUrl, onPaymentSuccess, onPaymentFailure }
     const successPath = `${window.location.pathname}?payment=success&t=${timestamp}`;
     const returnUrl = `${window.location.origin}${successPath}`;
 
+    // Open payment window as popup
     const checkoutUrl = `${baseUrl}?redirect_url=${encodeURIComponent(returnUrl)}`;
 
-    // Open payment window as popup
     const width = 480;
     const height = 700;
     const left = window.screen.width / 2 - width / 2;
