@@ -59,6 +59,7 @@ export const PrintablePortfolio: React.FC<PrintablePortfolioProps> = ({ data }) 
                   <h4 className="font-medium text-gray-900 mb-2">Investment Analysis</h4>
                   <div className="space-y-2">
                     <p className="text-gray-600">{asset.explanation}</p>
+                    <p className="text-gray-600">{asset.riskAssessment}</p>
                   </div>
                 </div>
               </div>

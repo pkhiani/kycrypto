@@ -75,7 +75,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$28.5B",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "Ethereum",
@@ -86,7 +87,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$18.3B",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "Solana",
@@ -97,7 +99,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$4B",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "XRP",
@@ -108,7 +111,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$3B",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "Dogecoin",
@@ -119,7 +123,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$2B",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "Chainlink",
@@ -130,7 +135,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$217M",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         },
         {
           "name": "Cardano",
@@ -141,7 +147,8 @@ const generatePrompt = (formData: KYCFormData): string => {
           "volume": "$250M",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>
+          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
+          "riskAssessment": <identify and analyze the risks for this kind of investment>
         }
       ]
     }`;

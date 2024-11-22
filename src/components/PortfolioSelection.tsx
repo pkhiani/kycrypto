@@ -117,12 +117,12 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
                     <div className="space-y-2">
                       <p className="text-gray-600">Market Cap: {selectedAsset.marketCap}</p>
                       <p className="text-gray-600">24h Volume: {selectedAsset.volume}</p>
-                      <p className="text-gray-600">24h Price Change: {Math.round(selectedAsset.volatility * 100) / 100}% </p>
                       <p className="text-gray-600">Market Sentiment: {selectedAsset.sentiment}</p>
                     </div>
                     <div className="space-y-2">
                       <p className="text-gray-600">Recommended Allocation: {selectedAsset.value}%</p>
                       <p className="text-gray-600">{selectedAsset.explanation}</p>
+                      <p className="text-gray-600">{selectedAsset.riskAssessment}</p>
                     </div>
                   </div>
                 </div>
