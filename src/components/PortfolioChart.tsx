@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { PortfolioAllocation } from '../types';
 import { ArrowLeft, Lock, Unlock } from 'lucide-react';
@@ -59,7 +59,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const totalInvestment = data.reduce((sum, asset) => sum + (asset.amount || 0), 0);
 
-  const portfolioType = useMemo(() => {
+  const portfolioType = React.useMemo(() => {
     const bitcoinAllocation = data.find(asset => asset.name === 'Bitcoin')?.value || 0;
     if (bitcoinAllocation > 50) return 'Conservative';
     if (bitcoinAllocation >= 40) return 'Balanced';
@@ -72,6 +72,10 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
     } else {
       setIsPaymentModalOpen(true);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    onViewDetails();
   };
 
   const formatCurrency = (amount: number) => {
@@ -209,6 +213,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
       <PaymentModal 
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
+        onSuccess={handlePaymentSuccess}
       />
     </div>
   );

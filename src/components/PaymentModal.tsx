@@ -1,30 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { X } from 'lucide-react';
 import { useStripePayment } from '../hooks/useStripePayment';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
-export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
-  const { handlePayment, checkPaymentStatus } = useStripePayment({
-    baseUrl: 'https://buy.stripe.com/00g17X1Ya98rcYEbII',
+export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSuccess }) => {
+  const { handlePayment } = useStripePayment({
+    priceId: 'price_1QNpejIRJlz64BkZrezOozac', // Replace with your actual Stripe price ID
     onPaymentSuccess: () => {
-      alert('Payment was successful!'); // Replace with your desired logic
+      localStorage.setItem('kycrypto_premium', 'true');
       onClose();
+      onSuccess();
     },
     onPaymentFailure: () => {
-      alert('Payment failed. Please try again.'); // Handle failure
+      alert('Payment verification failed. Please try again or contact support.');
     },
   });
-
-  // Check payment status when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      checkPaymentStatus();
-    }
-  }, [isOpen, checkPaymentStatus]);
 
   if (!isOpen) return null;
 

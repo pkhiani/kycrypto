@@ -1,85 +1,90 @@
 import { useState, useCallback, useEffect } from 'react';
+import { createCheckoutSession, verifyPayment } from '../services/paymentService';
 
 interface UseStripePaymentProps {
-  baseUrl: string;
+  priceId: string;
   onPaymentSuccess: () => void;
   onPaymentFailure: () => void;
 }
 
-export const useStripePayment = ({ baseUrl, onPaymentSuccess, onPaymentFailure }: UseStripePaymentProps) => {
+export const useStripePayment = ({ priceId, onPaymentSuccess, onPaymentFailure }: UseStripePaymentProps) => {
   const [paymentWindowRef, setPaymentWindowRef] = useState<Window | null>(null);
 
-  // Poll for payment success when payment window is open
+  // Check payment status on URL changes
+  useEffect(() => {
+    const checkPaymentStatus = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const paymentStatus = params.get('payment');
+      
+      if (paymentStatus) {
+        try {
+          const isVerified = await verifyPayment(paymentStatus);
+          if (isVerified) {
+            // Close the payment window if it's still open
+            if (paymentWindowRef && !paymentWindowRef.closed) {
+              paymentWindowRef.close();
+            }
+            window.history.replaceState({}, '', window.location.pathname);
+            onPaymentSuccess();
+          } else {
+            onPaymentFailure();
+          }
+        } catch (error) {
+          onPaymentFailure();
+        }
+      }
+    };
+
+    checkPaymentStatus();
+  }, [onPaymentSuccess, onPaymentFailure, paymentWindowRef]);
+
+  // Monitor payment window state
   useEffect(() => {
     if (!paymentWindowRef) return;
 
     const pollInterval = setInterval(() => {
       if (paymentWindowRef.closed) {
-        const paymentPending = localStorage.getItem('payment_pending');
-        const paymentSuccess = localStorage.getItem('pending_payment_success');
-
-        if (paymentPending && paymentSuccess === 'true') {
-          // Payment was successful
-          localStorage.removeItem('payment_pending');
-          localStorage.removeItem('pending_payment_success');
-          onPaymentSuccess();
-        } else if (paymentPending) {
-          // Payment failed or canceled
-          localStorage.removeItem('payment_pending');
-          onPaymentFailure();
-        }
-
         clearInterval(pollInterval);
         setPaymentWindowRef(null);
+        
+        // Check if payment was successful when window is closed
+        const params = new URLSearchParams(window.location.search);
+        const paymentStatus = params.get('payment');
+        if (paymentStatus === 'success') {
+          onPaymentSuccess();
+        }
       }
     }, 500);
 
     return () => clearInterval(pollInterval);
-  }, [paymentWindowRef, onPaymentSuccess, onPaymentFailure]);
+  }, [paymentWindowRef, onPaymentSuccess]);
 
-  // Handle payment initiation
-  const handlePayment = useCallback(() => {
-    // Set up payment tracking
-    localStorage.setItem('payment_pending', 'true');
-    localStorage.removeItem('pending_payment_success');
+  const handlePayment = useCallback(async () => {
+    try {
+      const checkoutUrl = await createCheckoutSession(priceId);
+      
+      const width = 480;
+      const height = 700;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
 
-    // Create success URL with a timestamp to prevent caching
-    const timestamp = Date.now();
-    const successPath = `${window.location.pathname}?payment=success&t=${timestamp}`;
-    const returnUrl = `${window.location.origin}${successPath}`;
+      const paymentWindow = window.open(
+        checkoutUrl,
+        'Stripe Checkout',
+        `width=${width},height=${height},left=${left},top=${top}`
+      );
 
-    // Open payment window as popup
-    const checkoutUrl = `${baseUrl}?redirect_url=${encodeURIComponent(returnUrl)}`;
-
-    const width = 480;
-    const height = 700;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-
-    const paymentWindow = window.open(
-      checkoutUrl,
-      'Stripe Checkout',
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
-
-    if (paymentWindow) {
-      setPaymentWindowRef(paymentWindow);
-      paymentWindow.focus();
+      if (paymentWindow) {
+        setPaymentWindowRef(paymentWindow);
+        paymentWindow.focus();
+      }
+    } catch (error) {
+      console.error('Failed to initiate payment:', error);
+      onPaymentFailure();
     }
-  }, [baseUrl]);
-
-  // Check payment status (useful for modal open)
-  const checkPaymentStatus = useCallback(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentStatus = urlParams.get('payment');
-
-    if (paymentStatus === 'success') {
-      localStorage.setItem('pending_payment_success', 'true');
-    }
-  }, []);
+  }, [priceId, onPaymentFailure]);
 
   return {
-    handlePayment,
-    checkPaymentStatus,
+    handlePayment
   };
 };
