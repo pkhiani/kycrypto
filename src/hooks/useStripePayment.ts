@@ -10,7 +10,6 @@ interface UseStripePaymentProps {
 export const useStripePayment = ({ priceId, onPaymentSuccess, onPaymentFailure }: UseStripePaymentProps) => {
   const [paymentWindowRef, setPaymentWindowRef] = useState<Window | null>(null);
 
-  // Check payment status on URL changes
   useEffect(() => {
     const checkPaymentStatus = async () => {
       const params = new URLSearchParams(window.location.search);
@@ -20,10 +19,10 @@ export const useStripePayment = ({ priceId, onPaymentSuccess, onPaymentFailure }
         try {
           const isVerified = await verifyPayment(paymentStatus);
           if (isVerified) {
-            // Close the payment window if it's still open
             if (paymentWindowRef && !paymentWindowRef.closed) {
               paymentWindowRef.close();
             }
+            setPaymentWindowRef(null);
             window.history.replaceState({}, '', window.location.pathname);
             onPaymentSuccess();
           } else {
@@ -38,7 +37,6 @@ export const useStripePayment = ({ priceId, onPaymentSuccess, onPaymentFailure }
     checkPaymentStatus();
   }, [onPaymentSuccess, onPaymentFailure, paymentWindowRef]);
 
-  // Monitor payment window state
   useEffect(() => {
     if (!paymentWindowRef) return;
 
@@ -47,10 +45,8 @@ export const useStripePayment = ({ priceId, onPaymentSuccess, onPaymentFailure }
         clearInterval(pollInterval);
         setPaymentWindowRef(null);
         
-        // Check if payment was successful when window is closed
         const params = new URLSearchParams(window.location.search);
-        const paymentStatus = params.get('payment');
-        if (paymentStatus === 'success') {
+        if (params.get('payment') === 'success') {
           onPaymentSuccess();
         }
       }

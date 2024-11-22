@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ChevronDown, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Printer } from 'lucide-react';
 import type { PortfolioAllocation } from '../types';
+import { PrintablePortfolio } from './PrintablePortfolio';
 
 interface PortfolioSelectionProps {
   data: PortfolioAllocation[];
@@ -14,6 +15,19 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
   onBack 
 }) => {
   const [selectedAsset, setSelectedAsset] = useState<PortfolioAllocation | null>(null);
+  const [showPrintView, setShowPrintView] = useState(false);
+
+  const handlePrint = () => {
+    setShowPrintView(true);
+    setTimeout(() => {
+      window.print();
+      setShowPrintView(false);
+    }, 100);
+  };
+
+  if (showPrintView) {
+    return <PrintablePortfolio data={data} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -28,6 +42,13 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
               Back to Chart
             </button>
             <h2 className="text-2xl font-bold text-gray-900">Detailed Analysis</h2>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-full hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <Printer className="w-4 h-4 mr-2" />
+              Export Analysis
+            </button>
           </div>
 
           <div className="mb-8">

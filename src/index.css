@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media print {
+
+  /* Show the printable portfolio */
+  .printable-portfolio {
+    display: block !important;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 1cm !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Revert all child styles for proper rendering */
+  .printable-portfolio * {
+    display: revert !important;
+    visibility: visible !important;
+  }
+
+  /* Image rendering */
+  .printable-portfolio img {
+    display: block !important; /* Ensure visibility */
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Maintain aspect ratio */
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Page layout adjustments */
+  @page {
+    margin: 1cm;
+    size: A4; /* Adjust as necessary for your layout */
+  }
+
+  /* Page break handling */
+  .printable-portfolio .space-y-6 > div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Table/grid alignment adjustments */
+  .printable-portfolio .grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .printable-portfolio .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .printable-portfolio .text-gray-600 {
+    color: black !important;
+  }
+}
