@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useStripePayment } from '../hooks/useStripePayment';
 
@@ -8,12 +8,25 @@ interface PaymentModalProps {
 }
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-
-  const { handlePayment } = useStripePayment({
+  const { handlePayment, checkPaymentStatus } = useStripePayment({
     baseUrl: 'https://buy.stripe.com/00g17X1Ya98rcYEbII',
-    onPaymentSuccess: onClose,
+    onPaymentSuccess: () => {
+      alert('Payment was successful!'); // Replace with your desired logic
+      onClose();
+    },
+    onPaymentFailure: () => {
+      alert('Payment failed. Please try again.'); // Handle failure
+    },
   });
+
+  // Check payment status when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      checkPaymentStatus();
+    }
+  }, [isOpen, checkPaymentStatus]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -51,7 +64,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
                     <span className="text-gray-600">One-time payment</span>
                     <span className="text-2xl font-bold text-gray-900">$20</span>
                   </div>
-
                 </div>
               </div>
             </div>
