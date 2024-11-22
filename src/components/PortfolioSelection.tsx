@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, ChevronDown, Printer } from 'lucide-react';
 import type { PortfolioAllocation } from '../types';
 import { PrintablePortfolio } from './PrintablePortfolio';
+import TradingViewWidget from './TradingViewWidget';
 
 interface PortfolioSelectionProps {
   data: PortfolioAllocation[];
@@ -23,6 +24,19 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
       window.print();
       setShowPrintView(false);
     }, 100);
+  };
+
+  const getSymbolForTradingView = (assetName: string): string => {
+    const symbols: { [key: string]: string } = {
+      'Bitcoin': 'BTC',
+      'Ethereum': 'ETH',
+      'Solana': 'SOL',
+      'XRP': 'XRP',
+      'Dogecoin': 'DOGE',
+      'Chainlink': 'LINK',
+      'Cardano': 'ADA'
+    };
+    return symbols[assetName] || assetName;
   };
 
   if (showPrintView) {
@@ -96,19 +110,26 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
             </div>
 
             {selectedAsset && (
-              <div className="mt-6 bg-gray-50 rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{selectedAsset.name} Analysis</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <p className="text-gray-600">Market Cap: {selectedAsset.marketCap}</p>
-                    <p className="text-gray-600">24h Volume: {selectedAsset.volume}</p>
-                    <p className="text-gray-600">24h Price Change: {Math.round(selectedAsset.volatility * 100) / 100}% </p>
-                    <p className="text-gray-600">Market Sentiment: {selectedAsset.sentiment}</p>
+              <div className="mt-6 space-y-6">
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">{selectedAsset.name} Analysis</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <p className="text-gray-600">Market Cap: {selectedAsset.marketCap}</p>
+                      <p className="text-gray-600">24h Volume: {selectedAsset.volume}</p>
+                      <p className="text-gray-600">24h Price Change: {Math.round(selectedAsset.volatility * 100) / 100}% </p>
+                      <p className="text-gray-600">Market Sentiment: {selectedAsset.sentiment}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-gray-600">Recommended Allocation: {selectedAsset.value}%</p>
+                      <p className="text-gray-600">{selectedAsset.explanation}</p>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-gray-600">Recommended Allocation: {selectedAsset.value}%</p>
-                    <p className="text-gray-600">{selectedAsset.explanation}</p>
-                  </div>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded-lg p-4 w-128 h-72">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-1">Price Chart</h2>
+                  <TradingViewWidget symbol={getSymbolForTradingView(selectedAsset.name)} />
                 </div>
               </div>
             )}
