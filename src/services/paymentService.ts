@@ -19,7 +19,9 @@ export const createCheckoutSession = async (priceId: string): Promise<string> =>
 
 export const verifyPayment = async (payment: string): Promise<boolean> => {
   if (payment === 'success') {
+    const expirationTime = Date.now() + (12 * 60 * 60 * 1000); // 12 hours from now
     localStorage.setItem('kycrypto_premium', 'true');
+    localStorage.setItem('kycrypto_premium_expiration', expirationTime.toString());
     
     return true;
   }

@@ -10,9 +10,11 @@ interface PaymentModalProps {
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const { handlePayment } = useStripePayment({
-    priceId: 'price_1QNpejIRJlz64BkZrezOozac', // Replace with your actual Stripe price ID
+    priceId: 'price_1QNpejIRJlz64BkZrezOozac',
     onPaymentSuccess: () => {
+      const expirationTime = Date.now() + (12 * 60 * 60 * 1000);
       localStorage.setItem('kycrypto_premium', 'true');
+      localStorage.setItem('kycrypto_premium_expiration', expirationTime.toString());
       onClose();
       onSuccess();
     },
@@ -59,6 +61,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onS
                     <span className="text-gray-600">One-time payment</span>
                     <span className="text-2xl font-bold text-gray-900">$20</span>
                   </div>
+                  <p className="text-sm text-gray-500">Access expires in 12 hours</p>
                 </div>
               </div>
             </div>

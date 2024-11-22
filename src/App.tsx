@@ -13,7 +13,9 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('payment') === 'success') {
+      const expirationTime = Date.now() + (12 * 60 * 60 * 1000);
       localStorage.setItem('kycrypto_premium', 'true');
+      localStorage.setItem('kycrypto_premium_expiration', expirationTime.toString());
       window.history.replaceState({}, '', window.location.pathname);
       
       // Restore saved portfolio data
@@ -24,6 +26,13 @@ function App() {
         setStep('selection');
       }
     }
+
+    // Check premium expiration
+    const premiumExpiration = localStorage.getItem('kycrypto_premium_expiration');
+    if (premiumExpiration && Date.now() > parseInt(premiumExpiration)) {
+      localStorage.removeItem('kycrypto_premium');
+      localStorage.removeItem('kycrypto_premium_expiration');
+    }
   }, [setPortfolioAllocation]);
 
   const handleFormSubmit = () => {
@@ -32,9 +41,20 @@ function App() {
 
   const handleViewDetails = () => {
     const hasPremium = localStorage.getItem('kycrypto_premium') === 'true';
-    if (hasPremium) {
+    const premiumExpiration = localStorage.getItem('kycrypto_premium_expiration');
+    
+    if (hasPremium && premiumExpiration && Date.now() <= parseInt(premiumExpiration)) {
       setStep('selection');
     }
+  };
+
+  const checkPremiumStatus = () => {
+    const premiumExpiration = localStorage.getItem('kycrypto_premium_expiration');
+    return (
+      localStorage.getItem('kycrypto_premium') === 'true' &&
+      premiumExpiration &&
+      Date.now() <= parseInt(premiumExpiration)
+    );
   };
 
   return (
@@ -46,7 +66,7 @@ function App() {
           data={portfolioAllocation} 
           onBack={() => setStep('form')}
           onViewDetails={handleViewDetails}
-          hasPremium={localStorage.getItem('kycrypto_premium') === 'true'}
+          hasPremium={checkPremiumStatus()}
         />
       )}
       {step === 'selection' && (
