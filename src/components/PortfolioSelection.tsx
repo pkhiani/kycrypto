@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, ChevronDown, ExternalLink } from 'lucide-react';
 import type { PortfolioAllocation } from '../types';
 
 interface PortfolioSelectionProps {
@@ -13,18 +13,7 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
   onConfirm, 
   onBack 
 }) => {
-  const totalValue = data.reduce((sum, asset) => sum + asset.value, 0);
-  const riskLevel = data.reduce((risk, asset) => {
-    const volatilityScore = asset.volatility === 'High' ? 3 : 
-                           asset.volatility === 'Medium' ? 2 : 1;
-    return risk + (volatilityScore * (asset.value / totalValue));
-  }, 0);
-
-  const getRiskProfile = (score: number) => {
-    if (score <= 1.5) return 'Conservative';
-    if (score <= 2.2) return 'Balanced';
-    return 'Aggressive';
-  };
+  const [selectedAsset, setSelectedAsset] = useState<PortfolioAllocation | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -36,55 +25,72 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Form
+              Back to Chart
             </button>
-            <h2 className="text-2xl font-bold text-gray-900">AI-Generated Portfolio</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Detailed Analysis</h2>
           </div>
 
           <div className="mb-8">
-            <div className="bg-blue-50 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                Portfolio Risk Profile: {getRiskProfile(riskLevel)}
-              </h3>
-              <p className="text-blue-800">
-                This portfolio has been tailored to your risk tolerance and investment goals.
-              </p>
+            <div className="relative">
+              <button
+                onClick={() => setSelectedAsset(null)}
+                className="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              >
+                <div className="flex items-center">
+                  {selectedAsset ? (
+                    <>
+                      <img
+                        src={`/assets/crypto/${selectedAsset.name.toLowerCase()}.svg`}
+                        alt={selectedAsset.name}
+                        className="w-6 h-6 mr-2"
+                      />
+                      <span className="text-gray-900 font-medium">{selectedAsset.name}</span>
+                    </>
+                  ) : (
+                    <span className="text-gray-700 font-medium">Select a Cryptocurrency</span>
+                  )}
+                </div>
+                <ChevronDown className="h-5 w-5 text-gray-400" />
+              </button>
+
+              {!selectedAsset && (
+                <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  {data.map((asset) => (
+                    <button
+                      key={asset.name}
+                      onClick={() => setSelectedAsset(asset)}
+                      className="w-full flex items-center px-4 py-3 hover:bg-gray-50 transition-colors"
+                    >
+                      <img
+                        src={`/assets/crypto/${asset.name.toLowerCase()}.svg`}
+                        alt={asset.name}
+                        className="w-6 h-6 mr-2"
+                      />
+                      <span className="text-gray-900">{asset.name}</span>
+                      <span className="ml-auto text-gray-500">{asset.value}%</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-4">
-              {data.map((asset) => (
-                <div 
-                  key={asset.name}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={`https://cryptologos.cc/logos/${asset.name.toLowerCase()}-${
-                        asset.name === 'Bitcoin' ? 'btc' :
-                        asset.name === 'Ethereum' ? 'eth' :
-                        asset.name === 'Solana' ? 'sol' :
-                        asset.name === 'Cardano' ? 'ada' :
-                        asset.name === 'Chainlink' ? 'link' :
-                        asset.name === 'Dogecoin' ? 'doge' :
-                        asset.name.toLowerCase()
-                      }-logo.svg`}
-                      alt={asset.name}
-                      className="w-8 h-8"
-                    />
-                    <div>
-                      <h4 className="font-medium text-gray-900">{asset.name}</h4>
-                      <p className="text-sm text-gray-500">
-                        {asset.sentiment} • ${asset.amount}
-                      </p>
-                    </div>
+            {selectedAsset && (
+              <div className="mt-6 bg-gray-50 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{selectedAsset.name} Analysis</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <p className="text-gray-600">Market Cap: {selectedAsset.marketCap}</p>
+                    <p className="text-gray-600">24h Volume: {selectedAsset.volume}</p>
+                    <p className="text-gray-600">Volatility: {selectedAsset.volatility}</p>
+                    <p className="text-gray-600">Market Sentiment: {selectedAsset.sentiment}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-lg font-semibold text-gray-900">{asset.value}%</p>
-                    <p className="text-sm text-gray-500">Market Cap: {asset.marketCap}</p>
+                  <div className="space-y-2">
+                    <p className="text-gray-600">Recommended Allocation: {selectedAsset.value}%</p>
+                    <p className="text-gray-600">{selectedAsset.explanation}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end">
@@ -92,8 +98,7 @@ export const PortfolioSelection: React.FC<PortfolioSelectionProps> = ({
               onClick={onConfirm}
               className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              View Detailed Analysis
-              <ArrowRight className="ml-2 h-5 w-5" />
+              Back to Portfolio
             </button>
           </div>
         </div>
