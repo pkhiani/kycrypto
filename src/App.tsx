@@ -7,17 +7,24 @@ import { useKYCStore } from './store/kycStore';
 
 function App() {
   const [step, setStep] = useState<'welcome' | 'form' | 'chart' | 'selection'>('welcome');
-  const { portfolioAllocation } = useKYCStore();
+  const { portfolioAllocation, setPortfolioAllocation } = useKYCStore();
 
-  // Check payment status on mount and URL changes
+  // Check payment status and restore portfolio data on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('payment') === 'success') {
       localStorage.setItem('kycrypto_premium', 'true');
       window.history.replaceState({}, '', window.location.pathname);
-      setStep('selection');
+      
+      // Restore saved portfolio data
+      const savedPortfolio = localStorage.getItem('kycrypto_portfolio');
+      if (savedPortfolio) {
+        setPortfolioAllocation(JSON.parse(savedPortfolio));
+        localStorage.removeItem('kycrypto_portfolio'); // Clean up
+        setStep('selection');
+      }
     }
-  }, []);
+  }, [setPortfolioAllocation]);
 
   const handleFormSubmit = () => {
     setStep('chart');

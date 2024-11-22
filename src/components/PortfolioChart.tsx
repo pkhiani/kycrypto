@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { PortfolioAllocation } from '../types';
 import { ArrowLeft, Lock, Unlock } from 'lucide-react';
 import { WalletDropdown } from './WalletDropdown';
-import { PaymentModal } from './PaymentModal';
+import { useStripePayment } from '../hooks/useStripePayment';
 
 interface PortfolioChartProps {
   data: PortfolioAllocation[];
@@ -56,7 +56,16 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
   onViewDetails,
   hasPremium
 }) => {
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const { handlePayment } = useStripePayment({
+    priceId: 'price_1QNpejIRJlz64BkZrezOozac',
+    onPaymentSuccess: () => {
+      onViewDetails();
+    },
+    onPaymentFailure: () => {
+      alert('Payment verification failed. Please try again or contact support.');
+    },
+  });
+
   const totalInvestment = data.reduce((sum, asset) => sum + (asset.amount || 0), 0);
 
   const portfolioType = React.useMemo(() => {
@@ -70,12 +79,10 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
     if (hasPremium) {
       onViewDetails();
     } else {
-      setIsPaymentModalOpen(true);
+      // Save current portfolio data to localStorage before opening payment
+      localStorage.setItem('kycrypto_portfolio', JSON.stringify(data));
+      handlePayment();
     }
-  };
-
-  const handlePaymentSuccess = () => {
-    onViewDetails();
   };
 
   const formatCurrency = (amount: number) => {
@@ -209,12 +216,6 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({
           </p>
         </div>
       </div>
-
-      <PaymentModal 
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        onSuccess={handlePaymentSuccess}
-      />
     </div>
   );
 };
