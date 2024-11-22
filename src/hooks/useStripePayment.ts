@@ -6,10 +6,6 @@ interface UseStripePaymentProps {
 }
 
 export const useStripePayment = ({ baseUrl, onPaymentSuccess }: UseStripePaymentProps) => {
-  const [promoCode, setPromoCode] = useState('');
-  const [isValidating, setIsValidating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isPromoValid, setIsPromoValid] = useState(false);
   const [paymentWindowRef, setPaymentWindowRef] = useState<Window | null>(null);
 
   // Poll for payment success when payment window is open
@@ -42,10 +38,7 @@ export const useStripePayment = ({ baseUrl, onPaymentSuccess }: UseStripePayment
     const successPath = `${window.location.pathname}?payment=success&t=${timestamp}`;
     const returnUrl = `${window.location.origin}${successPath}`;
     
-    let checkoutUrl = `${baseUrl}?redirect_url=${encodeURIComponent(returnUrl)}`;
-    if (isPromoValid && promoCode) {
-      checkoutUrl += `&prefilled_promo_code=${encodeURIComponent(promoCode)}`;
-    }
+    const checkoutUrl = `${baseUrl}?redirect_url=${encodeURIComponent(returnUrl)}`;
     
     // Open payment window as popup
     const width = 480;
@@ -63,49 +56,9 @@ export const useStripePayment = ({ baseUrl, onPaymentSuccess }: UseStripePayment
       setPaymentWindowRef(paymentWindow);
       paymentWindow.focus();
     }
-  }, [baseUrl, promoCode, isPromoValid]);
-
-  const handlePromoCodeChange = (code: string) => {
-    setPromoCode(code);
-    if (isPromoValid) {
-      setIsPromoValid(false);
-    }
-    if (error) {
-      setError(null);
-    }
-  };
-
-  const validatePromoCode = useCallback(async (code: string) => {
-    setIsValidating(true);
-    setError(null);
-
-    try {
-      if (!code.trim()) {
-        throw new Error('Please enter a valid promo code');
-      }
-
-      // Simulate promo code validation
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, consider all non-empty codes valid
-      setIsPromoValid(true);
-      setPromoCode(code);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Invalid promo code');
-      setIsPromoValid(false);
-      setPromoCode('');
-    } finally {
-      setIsValidating(false);
-    }
-  }, []);
+  }, [baseUrl]);
 
   return {
-    promoCode,
-    isValidating,
-    error,
-    isPromoValid,
     handlePayment,
-    handlePromoCodeChange,
-    validatePromoCode,
   };
 };
