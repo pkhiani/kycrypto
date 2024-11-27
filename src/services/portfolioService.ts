@@ -67,91 +67,28 @@ const generatePrompt = (formData: KYCFormData): string => {
       "type": "Conservative|Balanced|Aggressive",
       "allocation": [
         {
-          "name": "Bitcoin",
+          "name": "<crypto name>",
           "value": <percentage allocation>,
           "amount": <investment amount allocation>,
-          "color": "#F7931A",
-          "marketCap": "$1.2T",
-          "volume": "$28.5B",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "Ethereum",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#3C3C3D",
-          "marketCap": "$500B",
-          "volume": "$18.3B",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "Solana",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#00FFA3",
-          "marketCap": "$50B",
-          "volume": "$4B",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "XRP",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#346AA9",
-          "marketCap": "$40B",
-          "volume": "$3B",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "Dogecoin",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#C2A633",
-          "marketCap": "$20B",
-          "volume": "$2B",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "Chainlink",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#0847F7",
-          "marketCap": "$6.6B",
-          "volume": "$217M",
-          "sentiment": "Bullish|Neutral|Bearish",
-          "volatility": "Low|Medium|High",
-          "explanation": <explanation on why the user should buy this crypto based on their inputs>,
-          "riskAssessment": <identify and analyze the risks for this kind of investment>
-        },
-        {
-          "name": "Cardano",
-          "value": <percentage allocation>,
-          "amount": <investment amount allocation>,
-          "color": "#0031B4",
-          "marketCap": "$12.5B",
-          "volume": "$250M",
+          "color": "<hex color>",
+          "marketCap": "<market cap>",
+          "volume": "<volume>",
           "sentiment": "Bullish|Neutral|Bearish",
           "volatility": "Low|Medium|High",
           "explanation": <explanation on why the user should buy this crypto based on their inputs>,
           "riskAssessment": <identify and analyze the risks for this kind of investment>
         }
       ]
-    }`;
+    }
+    Use the following colors:
+    Bitcoin: #F7931A,
+    Ethereum: #3C3C3D,
+    Solana: #00FFA3,
+    XRP: #346AA9,
+    Dogecoin: #C2A633,
+    Chainlink: #0847F7,
+    Cardano: #0031B4
+    `;
 };
 
 export const getAIPortfolioRecommendation = async (
