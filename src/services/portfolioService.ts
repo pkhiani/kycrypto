@@ -97,13 +97,18 @@ export const getAIPortfolioRecommendation = async (
   try {
     const prompt = generatePrompt(formData);
     const response = await fetch(
-      'https://message-tailor-api-production.up.railway.app/api/generate',
+      'https://api.openai.com/v1/chat/completions',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({
+          model: 'gpt-4o-mini', // Replace with your preferred model
+           messages: [{ role: 'user', content: prompt }],
+          max_tokens: 1000
+        }),
       }
     );
 
@@ -112,10 +117,11 @@ export const getAIPortfolioRecommendation = async (
     }
 
     const data = await response.json();
-    console.log(data);
+    console.log(data.choices[0].message.content.trim());
+    const portfolioData = data.choices[0].message.content.trim();
 
     // Extract JSON string by removing code block delimiters if present
-    const jsonContent = data.replace(/^```json|```$/g, '').trim();
+    const jsonContent = portfolioData.replace(/^```json|```$/g, '').trim();
     
 
     try {
