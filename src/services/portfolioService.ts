@@ -155,7 +155,7 @@ const fetchLiveMarketData = async (
       .join(',');
 
     const response = await axios.get(
-      `https://message-tailor-api-production.up.railway.app/crypto/market-data?symbols=${symbols}`
+      `${import.meta.env.VITE_CRYPTO_MARKETDATA_API}?symbols=${symbols}`
     );
 
     // If we have valid market data, update the allocations
