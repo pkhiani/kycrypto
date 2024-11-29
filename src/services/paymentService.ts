@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_STRIPE_API;
-
 export const createCheckoutSession = async (priceId: string): Promise<string> => {
   try {
-    const response = await axios.post(`${API_URL}/create-checkout-session`, {
+    const response = await axios.post(`${import.meta.env.VITE_STRIPE_API}/create-checkout-session`, {
       priceId,
       successUrl: `${window.location.origin}${window.location.pathname}?payment=success`,
       cancelUrl: `${window.location.origin}${window.location.pathname}?payment=cancelled`
