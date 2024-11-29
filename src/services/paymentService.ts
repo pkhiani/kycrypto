@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://message-tailor-api-production.up.railway.app/payment';
+const API_URL = import.meta.env.VITE_STRIPE_API;
 
 export const createCheckoutSession = async (priceId: string): Promise<string> => {
   try {
